@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.mc20;
+package com.lukflug.panelstudio.mc21;
 
 import org.lwjgl.glfw.GLFW;
 

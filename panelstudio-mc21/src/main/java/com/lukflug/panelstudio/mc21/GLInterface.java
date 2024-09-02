@@ -1,4 +1,4 @@
-package com.lukflug.panelstudio.mc20;
+package com.lukflug.panelstudio.mc21;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import net.minecraft.client.render.*;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fStack;
 import org.lwjgl.opengl.GL11;
 
 import com.lukflug.panelstudio.base.IInterface;
@@ -17,13 +19,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat.DrawMode;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+
 
 /**
  * Implementation of {@link IInterface} for OpenGL in Minecraft.
@@ -84,12 +82,11 @@ public abstract class GLInterface implements IInterface {
 	public void fillTriangle (Point pos1, Point pos2, Point pos3, Color c1, Color c2, Color c3) {
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(DrawMode.TRIANGLES,VertexFormats.POSITION_COLOR);
-		bufferbuilder.vertex(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).next();
-		bufferbuilder.vertex(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).next();
-		bufferbuilder.vertex(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).next();
-		tessellator.draw();
+		BufferBuilder bufferbuilder = tessellator.begin(DrawMode.TRIANGLES,VertexFormats.POSITION_COLOR);
+		bufferbuilder.vertex(pos1.x,pos1.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f);
+		bufferbuilder.vertex(pos2.x,pos2.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f);
+		bufferbuilder.vertex(pos3.x,pos3.y,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f);
+		BufferRenderer.draw(bufferbuilder.end());
 	}
 
 	@Override
@@ -100,24 +97,22 @@ public abstract class GLInterface implements IInterface {
 		normalx/=scale;
 		normaly/=scale;
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(DrawMode.LINES,VertexFormats.LINES);
-		bufferbuilder.vertex(a.x*256/255f,a.y*256/255f,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).normal(normalx,normaly,0).next();
-		bufferbuilder.vertex(b.x*256/255f,b.y*256/255f,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).normal(normalx,normaly,0).next();
-		tessellator.draw();
+		BufferBuilder bufferbuilder = tessellator.begin(DrawMode.LINES,VertexFormats.LINES);
+		bufferbuilder.vertex(a.x*256/255f,a.y*256/255f,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).normal(normalx,normaly,0);
+		bufferbuilder.vertex(b.x*256/255f,b.y*256/255f,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).normal(normalx,normaly,0);
+		BufferRenderer.draw(bufferbuilder.end());
 	}
 
 	@Override
 	public void fillRect (Rectangle r, Color c1, Color c2, Color c3, Color c4) {
 		RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f).next();
-		bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f).next();
-		bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).next();
-		bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).next();
-		tessellator.draw();
+		BufferBuilder bufferbuilder = tessellator.begin(DrawMode.QUADS,VertexFormats.POSITION_COLOR);
+		bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(c4.getRed()/255.0f,c4.getGreen()/255.0f,c4.getBlue()/255.0f,c4.getAlpha()/255.0f);
+		bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(c3.getRed()/255.0f,c3.getGreen()/255.0f,c3.getBlue()/255.0f,c3.getAlpha()/255.0f);
+		bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f);
+		bufferbuilder.vertex(r.x,r.y,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f);
+		BufferRenderer.draw(bufferbuilder.end());
 	}
 
 	@Override
@@ -130,7 +125,7 @@ public abstract class GLInterface implements IInterface {
 
 	@Override
 	public synchronized int loadImage (String name) {
-		images.add(new Identifier(getResourcePrefix()+name));
+		images.add(Identifier.of(getResourcePrefix()+name));
 		return images.size();
 	}
 
@@ -157,16 +152,15 @@ public abstract class GLInterface implements IInterface {
 			texCoords[3][0]=texCoords[2][0];
 			texCoords[2][0]=temp1;
 		}
-		RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
+		RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
 		RenderSystem.setShaderTexture(0,images.get(image-1));
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(DrawMode.QUADS,VertexFormats.POSITION_COLOR_TEXTURE);
-		bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[0][0],texCoords[0][1]).next();
-		bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[1][0],texCoords[1][1]).next();
-		bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[2][0],texCoords[2][1]).next();
-		bufferbuilder.vertex(r.x,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[3][0],texCoords[3][1]).next();
-		tessellator.draw();
+		BufferBuilder bufferbuilder = tessellator.begin(DrawMode.QUADS,VertexFormats.POSITION_COLOR_TEXTURE_LIGHT);
+		bufferbuilder.vertex(r.x,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[0][0],texCoords[0][1]);
+		bufferbuilder.vertex(r.x+r.width,r.y+r.height,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[1][0],texCoords[1][1]);
+		bufferbuilder.vertex(r.x+r.width,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[2][0],texCoords[2][1]);
+		bufferbuilder.vertex(r.x,r.y,getZLevel()).color(color.getRed()/255.0f,color.getGreen()/255.0f,color.getBlue()/255.0f,color.getAlpha()/255.0f).texture(texCoords[3][0],texCoords[3][1]);
+		BufferRenderer.draw(bufferbuilder.end());
 	}
 
 	/**
@@ -275,9 +269,9 @@ public abstract class GLInterface implements IInterface {
 			float array[] = {2 / (float) getScreenWidth(), 0, 0, -1, 0, -2 / (float) getScreenHeight(), 0, 1, 0, 0, -1 / 3000f, 0, 0, 0, 0, 1};
 			FloatBuffer buffer = FloatBuffer.allocate(16).put(array).flip();
 			RenderSystem.getProjectionMatrix().setTransposed(buffer);
-			MatrixStack modelview = RenderSystem.getModelViewStack();
-			modelview.push();
-			modelview.loadIdentity();
+			Matrix4fStack modelview = RenderSystem.getModelViewStack();
+			modelview.pushMatrix();
+			modelview.identity();
 			RenderSystem.applyModelViewMatrix();
 		}
 		RenderSystem.enableBlend();
@@ -295,7 +289,7 @@ public abstract class GLInterface implements IInterface {
 		RenderSystem.enableCull();
 		RenderSystem.disableBlend();
 		if (matrix) {
-			RenderSystem.getModelViewStack().pop();
+			RenderSystem.getModelViewStack().popMatrix();
 			RenderSystem.applyModelViewMatrix();
 			RenderSystem.getProjectionMatrix().set(projection);
 			projection=null;
