@@ -1,4 +1,4 @@
-myself# PanelStudio
+# PanelStudio
 An extensible and customizable GUI API/library to create ClickGUIs, HUDEditors and TabGUIs designed for use in Minecraft utility mods. It was originally designed for a private client, but made open source, so that it could be used for [GameSense](https://github.com/IUDevman/gamesense-client).
 
 The library has no depedencies (aside from Java 8), so it can be easily used for other purposes, aside from Minecraft utility mods. Thanks to Go_Hoosiers, for suggesting the name of this library. If you use this library, some attribution would be greatly appreciated. Also consider visiting the PanelStudio discord server: https://discord.gg/E3DrF4XvUE.
@@ -15,6 +15,7 @@ In addition to the core PanelStudio library, there are the PanelStudio-MC suppor
 | panelstudio-mc19        | example-mod19        | FabricMC 1.19.2        |
 | panelstudio-mc194       | example-mod194       | FabricMC 1.19.4        |
 | panelstudio-mc20        | example-mod20        | FabricMC 1.20          |
+| panelstudio-mc21        | example-mod21        | FabricMC 1.21          |
 
 Minecraft versions or APIs not in this table can also be used with PanelStudio, but the small PanelStudio-MC library has to be ported, which shouldn't be hard in most cases.
 
@@ -24,6 +25,7 @@ Minecraft versions or APIs not in this table can also be used with PanelStudio, 
 * Thanks to Chomp for making a pull request to change the readme, I guess.
 * Thanks to Diliard for porting PanelStudio-MC to Fabric 1.19.2!
 * Thanks to RitomG69 for porting PanelStudio-MC to Fabric 1.19.4 and 1.20!
+* Thanks to Pfuenzle for porting PanelStudio-MC to Fabric 1.21!
 
 ## Features
 * Everything is flexible and can be extended.
