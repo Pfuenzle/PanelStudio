@@ -12,7 +12,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "net.fabricmc:fabric-loom:${loomVersion}"
-		classpath "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
+		classpath "com.github.johnrengelman:shadow:8.1.1"
 	}
 }
 
@@ -29,6 +29,7 @@ configurations.all {
 }
 
 repositories {
+	mavenLocal()
 	maven {
 		name = "lukflug"
 		url = "https://lukflug.github.io/maven/"
