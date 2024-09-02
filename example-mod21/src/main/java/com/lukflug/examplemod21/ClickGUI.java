@@ -49,7 +49,7 @@ import com.lukflug.panelstudio.layout.PanelLayout;
 import com.lukflug.panelstudio.layout.SearchableLayout;
 import com.lukflug.panelstudio.layout.SinglePanelAdder;
 import com.lukflug.panelstudio.layout.StackedPanelAdder;
-import com.lukflug.panelstudio.mc20.MinecraftHUDGUI;
+import com.lukflug.panelstudio.mc21.MinecraftHUDGUI;
 import com.lukflug.panelstudio.popup.CenteredPositioner;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.popup.MousePositioner;
